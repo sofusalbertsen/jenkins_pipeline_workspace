@@ -156,14 +156,15 @@ git submodule update --init --recursive
                     sh "./build.sh"
                     stash name: "output", includes: "linux/**"
                 }
-            },
-            "windows x86": {
-                cleanNode("windows") {
-                    unstash "repo"
-                    bat "build.bat"
-                    stash name: "windows-suite-32", includes: "windows/**"
-                }
             }
+            // ,
+            // "windows x86": {
+            //     cleanNode("windows") {
+            //         unstash "repo"
+            //         bat "build.bat"
+            //         stash name: "windows-suite-32", includes: "windows/**"
+            //     }
+            // }
         ]
 
         parallel builders
@@ -196,7 +197,7 @@ stageWithGuard("Document") {
     cleanNode("linux") {
         unstash "repo"
         unstash "output"
-        sh "jenkins/build_documentation.sh"
+        sh "./build_documentation.sh"
         stash name: "documentation", includes: "documentation/**"
     }
 }
@@ -212,16 +213,17 @@ stageWithGuard("Package") {
                 sh "jenkins/package_driver_unix.sh"
                 stash name: "packages-linux-64-srpm", includes: "nt-*-3gd-${VERSION_NUMBER_FULL}.src.rpm"
             }
-        },
-        "windows": {
-            cleanNode("windows") {
-                unstash "repo"
-                unstash "windows-suite-32"
-                unstash "documentation"
-                bat "jenkins/package_suite_windows.bat"
-                stash name: "packages-windows", includes: "nt_suite_3gd_windows_${VERSION_NUMBER_FULL}.exe"
-            }
         }
+        // ,
+        // "windows": {
+        //     cleanNode("windows") {
+        //         unstash "repo"
+        //         unstash "windows-suite-32"
+        //         unstash "documentation"
+        //         bat "jenkins/package_suite_windows.bat"
+        //         stash name: "packages-windows", includes: "nt_suite_3gd_windows_${VERSION_NUMBER_FULL}.exe"
+        //     }
+        // }
     ]
 
     parallel builders
