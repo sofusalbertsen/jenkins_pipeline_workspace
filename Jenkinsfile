@@ -1,4 +1,5 @@
 // Constants
+//Where to upload the artifacts afterwards
 RELEASE_URL = ""
 //Small python script that increments the build number.
 MY_SQNZ_URL = "http://:8081/"
