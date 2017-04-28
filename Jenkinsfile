@@ -61,6 +61,7 @@ def cleanNode(name, closure) {
         }
     }
 }
+//If we want to send an email when things go wrong, we need to wrap it in a try/catch
 
 def stageWithGuard(name, closure) {
     try {
