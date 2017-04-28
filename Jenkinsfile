@@ -212,7 +212,7 @@ stageWithGuard("Package") {
                 unstash "repo"
                 unstash "documentation"
                 sh "./package_driver_unix.sh"
-                stash name: "linux", includes: "nt*.src.rpm"
+                //stash name: "linux", includes: "nt*.src.rpm"
             }
         }
         // ,
@@ -261,7 +261,7 @@ stageWithGuard("Upload") {
         unstash "repo"
         unstash "output"
         dir("upload-workspace") {
-            unstash "linux"
+          //  unstash "linux"
 
         }
         // sshagent (credentials: ["4058c10a-772b-4d0a-9f8b-cb611ca66ac6"]) {
