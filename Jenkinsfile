@@ -267,7 +267,7 @@ stageWithGuard("Upload") {
         // sshagent (credentials: ["4058c10a-772b-4d0a-9f8b-cb611ca66ac6"]) {
         //     sh "jenkins/upload_release.sh"
         // }
-        println "Artifact uploaded to: ${RELEASE_URL}/${VERSION_NUMBER_FULL}"
+      //  println "Artifact uploaded to: ${RELEASE_URL}/${VERSION_NUMBER_FULL}"
     }
 }
 
