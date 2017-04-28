@@ -89,8 +89,7 @@ def conditionalLock(condition, name, closure) {
 
 println "Parameters: branch: ${BRANCH_NAME}, target: ${TARGET_BRANCH_NAME}, merge: ${shouldMerge()}, release URL: ${RELEASE_URL}"
 
-
-conditionalLock(shouldMerge(), "pipeline-ntdrv-merge-lock") {
+conditionalLock(shouldMerge(), "pipeline-merge-lock") {
     // The following stages are locked to ensure that only one pipeline runs at
     // at a time. The stages in here must contain everything between and
     // including the original git checkout and the final git push of the merged
