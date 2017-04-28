@@ -99,7 +99,7 @@ conditionalLock(shouldMerge(), "pipeline-ntdrv-merge-lock") {
             buildNumber = currentBuild.number;
             //buildNumber = sh(script: "curl -sd '${TARGET_BRANCH_NAME}' ${MY_SQNZ_URL}", returnStdout: true).trim()
             currentBuild.displayName = "${currentBuild.displayName} (${buildNumber})"
-            sshagent (credentials: ["sofusalbertsen"]) {
+            sshagent (credentials: ["${SSH_AGENT_ID}"]) {
                 timeout(1) {
                     sh "git clone --no-checkout ${GIT_REPO} ."
                 }
