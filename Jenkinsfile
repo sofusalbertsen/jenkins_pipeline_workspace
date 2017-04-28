@@ -5,7 +5,7 @@ MY_SQNZ_URL = "http://:8081/"
 TARGET_BRANCH_NAME = "master"
 MERGE_BRANCH_PREFIX = "ready"
 GIT_REPO= "git@github.com:sofusalbertsen/jenkins_pipeline_workspace.git"
-
+SSH_AGENT_ID="sofusalbertsen"
 // State
 inputSHA = "" // Why can't Jenkins tell me this?!
 authorEmail = "none"
@@ -97,7 +97,7 @@ conditionalLock(shouldMerge(), "pipeline-ntdrv-merge-lock") {
         cleanNode("master") {
             buildNumber = sh(script: "curl -sd '${TARGET_BRANCH_NAME}' ${MY_SQNZ_URL}", returnStdout: true).trim()
             currentBuild.displayName = "${currentBuild.displayName} (${buildNumber})"
-            sshagent (credentials: ["0865589f-59e5-47ec-be65-591180ee5278"]) {
+            sshagent (credentials: ["${SSH_AGENT_ID}"]) {
                 timeout(1) {
                     sh 'git clone --no-checkout ssh://${GIT_REPO} .'
                 }
@@ -173,7 +173,7 @@ git submodule update --init --recursive
             cleanNode("master") {
                 unstash "repo"
 
-                sshagent (credentials: ["0865589f-59e5-47ec-be65-591180ee5278"]) {
+                sshagent (credentials: ["${SSH_AGENT_ID}"]) {
                     timeout(1) {
                         sh """
 git push origin ${TARGET_BRANCH_NAME}
