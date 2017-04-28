@@ -149,16 +149,16 @@ git submodule update --init --recursive
 
     stageWithGuard("Build") {
         def builders = [
-            "centos5 amd64": {
-                cleanNode("compile&&centos5") {
+            "linux": {
+                cleanNode("linux") {
                     unstash "repo"
 
                     sh "build.sh"
                     stash name: "output", includes: "build/**"
                 }
             },
-            "windows2012r2 x86": {
-                cleanNode("compile&&windows2012r2") {
+            "windows x86": {
+                cleanNode("windows") {
                     unstash "repo"
                     bat "jenkins\\build_suite_windows.bat x86"
                     stash name: "windows-suite-32", includes: "suite-windows-32/**"
@@ -193,7 +193,7 @@ fi
 }
 
 stageWithGuard("Document") {
-    cleanNode("centos7") {
+    cleanNode("linux") {
         unstash "repo"
         unstash "output"
         sh "jenkins/build_documentation.sh"
@@ -205,16 +205,16 @@ stageWithGuard("Document") {
 
 stageWithGuard("Package") {
     def builders = [
-        "centos5": {
-            cleanNode("centos5") {
+        "linux": {
+            cleanNode("linux") {
                 unstash "repo"
                 unstash "documentation"
                 sh "jenkins/package_driver_unix.sh"
                 stash name: "packages-linux-64-srpm", includes: "nt-*-3gd-${VERSION_NUMBER_FULL}.src.rpm"
             }
         },
-        "windows2012r2": {
-            cleanNode("windows2012r2") {
+        "windows": {
+            cleanNode("windows") {
                 unstash "repo"
                 unstash "windows-suite-32"
                 unstash "documentation"
@@ -242,10 +242,10 @@ def verifyLinux(_node, _script) {
 
 stageWithGuard("Verify") {
     def builders = [
-        "smoketest": verifyLinux("smoketest&&linux", "sudo -n jenkins/smoketest.sh"),
-        "centos5":   verifyLinux("centos5", "jenkins/verify_dyld.sh"),
-        "centos6":   verifyLinux("centos6", "jenkins/verify_dyld.sh"),
-        "centos7":   verifyLinux("centos7", "jenkins/verify_dyld.sh")
+        //"smoketest": verifyLinux("smoketest&&linux", "sudo -n jenkins/smoketest.sh"),
+        //"centos5":   verifyLinux("centos5", "jenkins/verify_dyld.sh"),
+        //"centos6":   verifyLinux("centos6", "jenkins/verify_dyld.sh"),
+        "linux":   verifyLinux("linux", "smoketest.sh")
     ]
 
     parallel builders
