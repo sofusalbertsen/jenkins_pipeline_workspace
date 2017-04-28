@@ -258,17 +258,10 @@ stageWithGuard("Verify") {
 stageWithGuard("Upload") {
     cleanNode("master") {
         unstash "repo"
-        unstash "ntservice-output"
+        unstash "output"
         dir("upload-workspace") {
-            unstash "packages-linux-64"
-            unstash "packages-linux-64-srpm"
-            unstash "packages-linux-adv-examples"
-            unstash "packages-linux-pps-examples"
-            unstash "packages-linux-install-script"
-            unstash "packages-freebsd-64"
-            unstash "packages-windows-both"
-            unstash "documentation-dn0449"
-            unstash "documentation-dn0449-xml"
+            unstash "linux"
+
         }
         // sshagent (credentials: ["4058c10a-772b-4d0a-9f8b-cb611ca66ac6"]) {
         //     sh "jenkins/upload_release.sh"
