@@ -1,0 +1,91 @@
+#!groovy
+/**
+ * Helper methods 
+ */
+def isReadyBranch={branch ->
+	if (branch.contains("ready")){
+			return true
+		}
+	false
+}
+
+def getMasterName ={branch ->
+	def token= branch.tokenize('/')
+	def ready_index=token.indexOf('ready')
+	token[ready_index-1]+"/master"
+}
+def builds = [
+//	'windows',
+	'linux'] // labels for Jenkins node types we will build on
+
+def builders = [:]
+for (x in builds) {
+	def label = x // Need to bind the label variable before the closure - can't do 'for (label in labels)'
+
+	// Create a map to pass in to the 'parallel' step so we can fire all the builds at once
+	builders[label] = {
+		node(label) {
+			// build steps that should happen on all nodes go here
+			stage ("pip-"+label ){ 
+			     unstash 'scm' //sh 'mvn test'
+			     sh 'ls -al .git'
+			}
+
+
+		}
+	}
+}
+
+
+
+
+if(isReadyBranch("$BRANCH_NAME")){
+stage('init & prep pip'){
+	node('linux'){
+
+		checkout scm
+		echo "$BRANCH_NAME"
+		
+		//Find out if it's a ready branch or not.
+		if(isUnix()){
+			sh 'git checkout origin/master'
+			sh "git merge origin/${BRANCH_NAME}"
+		} else {
+			bat 'git checkout origin/master'
+			bat "git merge origin/${BRANCH_NAME}"
+		}
+		stash name:'scm' useDefaultExcludes:false
+
+	}
+}
+}
+
+
+stage ('pip'){ 
+	parallel builders 
+}
+
+stage('complete-pip'){
+	node('linux'){
+		if(isUnix()){
+			echo "will this come on master?!?!??"
+			sshagent (credentials: ['sofusalbertsen']) {
+				sh 'git log --oneline --decorate --graph -n5'
+				sh 'git push origin HEAD:refs/heads/master'
+			}
+			//                sh "git push origin :refs/heads/${git_branch.replace('origin/', '')}"
+		} else {
+			bat 'git log --oneline --decorate --graph -n5'
+			bat 'git push origin HEAD:refs/heads/master'
+			//bat "git push origin :refs/heads/${git_branch.replace('origin/', '')}"
+		}
+	}
+}
+stage ('build'){
+	node('linux'){
+
+		unstash 'scm'
+		sh 'mvn test'
+		archiveArtifacts artifacts: 'target/*.jar'
+	}
+}
