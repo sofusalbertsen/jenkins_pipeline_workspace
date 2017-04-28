@@ -101,7 +101,7 @@ conditionalLock(shouldMerge(), "pipeline-ntdrv-merge-lock") {
             currentBuild.displayName = "${currentBuild.displayName} (${buildNumber})"
             sshagent (credentials: ["sofusalbertsen"]) {
                 timeout(1) {
-                    sh "git clone --no-checkout ssh://${GIT_REPO} ."
+                    sh "git clone --no-checkout ${GIT_REPO} ."
                 }
 
                 inputSHA = sh(script: "git rev-parse origin/${BRANCH_NAME}", returnStdout: true).trim()
