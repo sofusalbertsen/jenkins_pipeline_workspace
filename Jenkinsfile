@@ -152,7 +152,7 @@ git submodule update --init --recursive
             "linux": {
                 cleanNode("linux") {
                     unstash "repo"
-
+                    sh "ls"
                     sh "build.sh"
                     stash name: "output", includes: "linux/**"
                 }
