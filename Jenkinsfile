@@ -1,5 +1,6 @@
 // Constants
 RELEASE_URL = ""
+//Small python script that increments the build number.
 MY_SQNZ_URL = "http://:8081/"
 // This is to ensure that a developer does not push to the wrong ready branch namespace.
 TARGET_BRANCH_NAME = "master"
@@ -95,7 +96,8 @@ conditionalLock(shouldMerge(), "pipeline-ntdrv-merge-lock") {
 
     stageWithGuard("Checkout") {
         cleanNode("master") {
-            buildNumber = sh(script: "curl -sd '${TARGET_BRANCH_NAME}' ${MY_SQNZ_URL}", returnStdout: true).trim()
+            buildNumber = currentBuild.number;
+            //buildNumber = sh(script: "curl -sd '${TARGET_BRANCH_NAME}' ${MY_SQNZ_URL}", returnStdout: true).trim()
             currentBuild.displayName = "${currentBuild.displayName} (${buildNumber})"
             sshagent (credentials: ["${SSH_AGENT_ID}"]) {
                 timeout(1) {
