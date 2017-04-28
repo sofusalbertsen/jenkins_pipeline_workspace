@@ -212,7 +212,7 @@ stageWithGuard("Package") {
                 unstash "repo"
                 unstash "documentation"
                 sh "./package_driver_unix.sh"
-                stash name: "linux", includes: "nt-*-3gd-${VERSION_NUMBER_FULL}.src.rpm"
+                stash name: "linux", includes: "nt*.src.rpm"
             }
         }
         // ,
