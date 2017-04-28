@@ -196,7 +196,7 @@ stageWithGuard("Document") {
     cleanNode("linux") {
         unstash "repo"
         unstash "output"
-        sh "jenkins/build_documentation.sh"
+        sh "./build_documentation.sh"
         stash name: "documentation", includes: "documentation/**"
     }
 }
