@@ -4,7 +4,7 @@ MY_SQNZ_URL = "http://:8081/"
 // This is to ensure that a developer does not push to the wrong ready branch namespace.
 TARGET_BRANCH_NAME = "master"
 MERGE_BRANCH_PREFIX = "ready"
-
+GIT_REPO= "git@github.com:sofusalbertsen/jenkins_pipeline_workspace.git"
 
 // State
 inputSHA = "" // Why can't Jenkins tell me this?!
@@ -99,7 +99,7 @@ conditionalLock(shouldMerge(), "pipeline-ntdrv-merge-lock") {
             currentBuild.displayName = "${currentBuild.displayName} (${buildNumber})"
             sshagent (credentials: ["0865589f-59e5-47ec-be65-591180ee5278"]) {
                 timeout(1) {
-                    sh 'git clone --no-checkout ssh://git@dev.napatech.com:7999/dsw/ntdrv.git .'
+                    sh 'git clone --no-checkout ssh://${GIT_REPO} .'
                 }
 
                 inputSHA = sh(script: "git rev-parse origin/${BRANCH_NAME}", returnStdout: true).trim()
