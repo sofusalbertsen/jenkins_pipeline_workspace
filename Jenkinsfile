@@ -154,14 +154,14 @@ git submodule update --init --recursive
                     unstash "repo"
 
                     sh "build.sh"
-                    stash name: "output", includes: "build/**"
+                    stash name: "output", includes: "linux/**"
                 }
             },
             "windows x86": {
                 cleanNode("windows") {
                     unstash "repo"
-                    bat "jenkins\\build_suite_windows.bat x86"
-                    stash name: "windows-suite-32", includes: "suite-windows-32/**"
+                    bat "build.bat"
+                    stash name: "windows-suite-32", includes: "windows/**"
                 }
             }
         ]
@@ -268,9 +268,9 @@ stageWithGuard("Upload") {
             unstash "documentation-dn0449"
             unstash "documentation-dn0449-xml"
         }
-        sshagent (credentials: ["4058c10a-772b-4d0a-9f8b-cb611ca66ac6"]) {
-            sh "jenkins/upload_release.sh"
-        }
+        // sshagent (credentials: ["4058c10a-772b-4d0a-9f8b-cb611ca66ac6"]) {
+        //     sh "jenkins/upload_release.sh"
+        // }
         println "Artifact uploaded to: ${RELEASE_URL}/${VERSION_NUMBER_FULL}"
     }
 }
