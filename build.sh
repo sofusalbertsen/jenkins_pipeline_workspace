@@ -1,4 +1,4 @@
 #! /bin/bash
 mkdir linux
 cd linux
-touch linux.bin
+echo "linux binary" > linux.bin
