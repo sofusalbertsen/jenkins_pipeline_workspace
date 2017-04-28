@@ -210,8 +210,8 @@ stageWithGuard("Package") {
             cleanNode("linux") {
                 unstash "repo"
                 unstash "documentation"
-                sh "jenkins/package_driver_unix.sh"
-                stash name: "packages-linux-64-srpm", includes: "nt-*-3gd-${VERSION_NUMBER_FULL}.src.rpm"
+                sh "./package_driver_unix.sh"
+                stash name: "linux", includes: "nt-*-3gd-${VERSION_NUMBER_FULL}.src.rpm"
             }
         }
         // ,
